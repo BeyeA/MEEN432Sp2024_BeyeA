@@ -1,1 +1,9 @@
-This file explains how to run the Project 1, Week 1 deliverable. 
+This file explains how to run the Project 1, Week 1 deliverable.
+
+Part 1:
+Download the Week1_code.m (Matlab) file and the Week1.slx (Simulink Block) file.
+Open the downloaded files using the Matlab R2023b application.
+Click the "run" button on the Matlab application.
+The expected output from running the program should be 6 figures with two plots per page.
+
+
