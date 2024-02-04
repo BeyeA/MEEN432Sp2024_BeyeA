@@ -1,0 +1,179 @@
+% Initial Conditions
+
+w_0 = [10, 0]; % Initial Angular Velocity [rad/s]
+J = [100, 0.1]; % Rotational Inertia [kg-m^2]
+b = [10, 0.1]; % Damping Coefficient [N-m-s/rad]
+A = [0, 100]; % Constant Applied Torque [N-m]
+freq = [0.1, 100]; % Freq
+dT = [0.001, 0.1, 1]; % Time Step [s]
+
+
+
+maxSimulationError = zeros(length(integrationTimeSteps)*2, 1);
+cpuTime = zeros(length(integrationTimeSteps)*2, 1);
+
+solver = ["ode1", "ode4",]; % Fixed Time Step Solver [Euler]
+variable_solver = ["ode45", "ode23tb"]; %Variable Time Step Solver 
+
+combo = combinations(w_0,J,b,A,freq,dT,solver);
+combo_variable = combinations(w_0,J,b,A,freq,variable_solver);
+
+
+%Fixed Time Step
+
+
+for i = 1:size(combo,1)
+    current_values = combo(i,:);
+    w_0_current = current_values.(1);
+    J_current = current_values.(2);
+    b_current = current_values.(3);
+    A_current = current_values.(4);
+    freq_current = current_values.(5);
+    dT_current = current_values.(6);
+    solver_current = current_values.(7);
+
+    simout = sim("Week2.slx", "Solver", solver_current, "FixedStep", string(dT_current));
+    W = simout.w.Data;
+    W_DOT = simout.w_dot.Data;
+    T = simout.tout;
+
+    Time_Cpu = cputime;
+    
+    Theoretical_Rotational = zeros(length(T),1);
+
+    if solver_current == "ode1"
+        for j = 1:size(T)
+            TR_Current = (A_current/b_current)*(1-exp((-b_current/J_current)*T(j,1)))+w_0_current*exp(((-b_current/J_current)*T(j,1)));
+            Theoretical_Rotational(1:j) = TR_Current;
+            Error = W_DOT(1:j) - Theoretical_Rotational(1:j);
+
+        end
+    else
+        for j = 1:size(T)
+            TR_Current = (A_current/b_current)*(1-exp((-b_current/J_current)*T(j,1)))+w_0_current*exp(((-b_current/J_current)*T(j,1)));
+            Theoretical_Rotational(1:j) = TR_Current;
+            Error = W_DOT(1:j) - Theoretical_Rotational(1:j);
+        end
+       
+    end
+
+    Max_Error = max(Error);
+    Step_Max_Error(end+1) = Max_Error;
+
+
+    % Create a new figure for each simulation
+    figure; 
+    subplot(2, 4, 1);
+    plot(T, W);
+    xlabel('Time (s)');
+    ylabel('Angular Velocity');
+    title({ ...
+            ['Angular Velocity for dT = ' num2str(dT_current)]
+            ['Solver = ' num2str(solver_current)]
+            ['w0 = ' num2str(w_0_current) ' J = ' num2str(J_current) ' b = ' num2str(b_current)]
+            ['A = ' num2str(A_current) ' Freq =' num2str(freq_current)]
+            });
+
+    subplot(2, 4, 2);
+    plot(T, W_DOT);
+    xlabel('Time (s)');
+    ylabel('Angular Acceleration');
+    title({ ...
+            ['Angular Acceleration for dT = ' num2str(dT_current)]
+            ['Solver = ' num2str(solver_current)]
+            ['w0 = ' num2str(w_0_current) ' J = ' num2str(J_current) ' b = ' num2str(b_current)]
+            ['A = ' num2str(A_current) ' Freq =' num2str(freq_current)]
+            });
+
+    subplot(2, 4, 3);
+        plot(Time, Max_Error);
+        xlabel('Time CPU(s)');
+        ylabel('Max Error');
+        title({ ...
+                ['Angular Acceleration for dT = variable time step']
+                ['Solver = ' num2str(solver_current)]
+                ['w0 = ' num2str(w_0_current) ' J = ' num2str(J_current) ' b = ' num2str(b_current)]
+                ['A = ' num2str(A_current) ' Freq =' num2str(freq_current)]
+                });
+         
+end
+%}
+
+
+%Variable Time Step
+for i = 1:size(combo_variable,1)
+    current_values = combo_variable(i,:);
+    w_0_current = current_values.(1);
+    J_current = current_values.(2);
+    b_current = current_values.(3);
+    A_current = current_values.(4);
+    freq_current = current_values.(5);   
+    solver_current = current_values.(6);
+
+    simout = sim("Week1.slx", "Solver", solver_current);
+    W = simout.w.Data;
+    W_DOT = simout.w_dot.Data;
+    T = simout.tout;
+    Time_Cpu = cputime;
+    
+    %Solution from Runge Kutta 4th order, DT=0.001
+    solver_compare = "ode4";
+    dt_current = 0.001;
+    simout = sim("Week2.slx", "Solver", solver_compare, "FixedStep", string(dt_current));
+    W_compare = simout.w.Data;
+    W_DOT_compare = simout.w_dot.Data;
+    T_compare = simout.tout;
+
+    Theoretical_Rotational = zeros(length(T),1);
+    Error = zeros(length(T),1);
+    
+    for j = 1:size(T)
+        TR_Current = (A_current/b_current)*(1-exp((-b_current/J_current)*T(j,1)))+w_0_current*exp(((-b_current/J_current)*T(j,1)));
+        Theoretical_Rotational(1:j) = TR_Current;
+        Error = W_DOT_compare(1:j) - Theoretical_Rotational(1:j);
+    end
+
+    Max_Error = max(Error);
+    Sinusoidal_Max_Error(end+1) = Max_Error;
+
+
+
+    % Create a new figure for each simulation
+    figure; 
+    subplot(3, 3, 1);
+    plot(T, W);
+    xlabel('Time (s)');
+    ylabel('Angular Velocity');
+    title({ ...
+            ['Angular Velocity for dT = variable time step']
+            ['Solver = ' num2str(solver_current)]
+            ['w0 = ' num2str(w_0_current) ' J = ' num2str(J_current) ' b = ' num2str(b_current)]
+            ['A = ' num2str(A_current) ' Freq =' num2str(freq_current)]
+            });
+    
+    subplot(3, 3, 2);
+    plot(T, W_DOT);
+    xlabel('Time (s)');
+    ylabel('Angular Acceleration');
+    title({ ...
+            ['Angular Acceleration for dT = variable time step']
+            ['Solver = ' num2str(solver_current)]
+            ['w0 = ' num2str(w_0_current) ' J = ' num2str(J_current) ' b = ' num2str(b_current)]
+            ['A = ' num2str(A_current) ' Freq =' num2str(freq_current)]
+            });
+
+    subplot(3, 3, 3);
+    plot(Time, Max_Error);
+    xlabel('Time CPU(s)');
+    ylabel('Max Error');
+    title({ ...
+            ['Angular Acceleration for dT = variable time step']
+            ['Solver = ' num2str(solver_current)]
+            ['w0 = ' num2str(w_0_current) ' J = ' num2str(J_current) ' b = ' num2str(b_current)]
+            ['A = ' num2str(A_current) ' Freq =' num2str(freq_current)]
+            });
+
+
+end
+
+
