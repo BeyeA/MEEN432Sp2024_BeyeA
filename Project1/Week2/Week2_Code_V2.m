@@ -88,7 +88,7 @@ for i = 1:6
         while x < 4
             % Create a new figure for each simulation
             figure; 
-            subplot(4, 2, 1);
+            subplot(3, 2, 1);
             plot(T, W);
             xlabel('Time (s)');
             ylabel('Angular Velocity');
@@ -99,7 +99,7 @@ for i = 1:6
             ['A = ' num2str(A_current) ' Freq =' num2str(freq_current)]
             });
             
-            subplot(4, 2, 2);
+            subplot(3, 2, 2);
             plot(T, W_DOT);
             xlabel('Time (s)');
             ylabel('Angular Acceleration');
@@ -111,7 +111,7 @@ for i = 1:6
             });  
 
             plot_array = ode1_values{x:y,["dT","Max_Error", "CPU_Time"]};
-            subplot(4, 2, 3);
+            subplot(3, 2, 3);
             plot(plot_array(:,1), plot_array(:,2));
             xlabel('Time Step (s)');
             ylabel('Max Simulation Error');
@@ -119,7 +119,7 @@ for i = 1:6
             ["Max Simulation Error vs. Time Step for Ode1"]
             });  
             
-            subplot(4, 2, 4);
+            subplot(3, 2, 4);
             plot(plot_array(:,1), plot_array(:,3));
             xlabel('Time Step (s)');
             ylabel('CPU Time');
@@ -127,7 +127,7 @@ for i = 1:6
             ["CPU Time vs. Time Step for Ode1"]
             }); 
             
-            subplot(4, 2, 5);
+            subplot(3, 2, 5);
             plot(plot_array(:,3), plot_array(:,2));
             xlabel('CPU Time (s)');
             ylabel('Max Simulation Error');
@@ -142,7 +142,7 @@ for i = 1:6
     else 
         while x1 < 4
             figure; 
-            subplot(4, 2, 1);
+            subplot(3, 2, 1);
             plot(T, W);
             xlabel('Time (s)');
             ylabel('Angular Velocity');
@@ -153,7 +153,7 @@ for i = 1:6
             ['A = ' num2str(A_current) ' Freq =' num2str(freq_current)]
             });
             
-            subplot(4, 2, 2);
+            subplot(3, 2, 2);
             plot(T, W_DOT);
             xlabel('Time (s)');
             ylabel('Angular Acceleration');
@@ -168,7 +168,7 @@ for i = 1:6
             x1 = x1+3;
             y1 = x1+2;
             
-            subplot(4, 2, 3);
+            subplot(3, 2, 3);
             plot(plot_array(:,1), plot_array(:,2));
             xlabel('Time Step (s)');
             ylabel('Max Simulation Error');
@@ -176,7 +176,7 @@ for i = 1:6
             ["Max Simulation Error vs. Time Step for Ode4"]
             });  
             
-            subplot(4, 2, 4);
+            subplot(3, 2, 4);
             plot(plot_array(:,1), plot_array(:,3));
             xlabel('Time Step (s)');
             ylabel('CPU Time');
@@ -184,7 +184,7 @@ for i = 1:6
             ["CPU Time vs. Time Step for Ode4"]
             }); 
             
-            subplot(4, 2, 5);
+            subplot(3, 2, 5);
             plot(plot_array(:,3), plot_array(:,2));
             xlabel('CPU Time (s)');
             ylabel('Max Simulation Error');
