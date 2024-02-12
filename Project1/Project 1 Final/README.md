@@ -1,4 +1,5 @@
-This file explains how to run the Project 2, Week 2 deliverable.
+This file explains how to run the Final Project Deliverables.
+
 
 Part 1: Download the Part1.m (Matlab) file and the Week2.slx (Simulink Block) file. Open the downloaded files using the Matlab R2023b application. Click the "run" button on the Matlab application. The expected output from running the program is set up for 8 simulations as outlined in the Week 2 deliverables. This is so that the computational load of running all 256 simulations is limited at first. 
 
