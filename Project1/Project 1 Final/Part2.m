@@ -10,7 +10,7 @@ dT = [0.1, 1]; % Time Step [s]
 
 solver = ["ode1", "ode4","ode45"]; % Solvers [Euler]
 
-combo = combinations(J1,J2,b1,b2,A,k,dT,solver,variable_solver);
+combo = combinations(J1,J2,b1,b2,A,k,dT,solver,solver);
 CPUCol_Option1 = zeros(height(combo),1);
 CPUCol_Option2 = zeros(height(combo),1);
 CPUCol_Option3 = zeros(height(combo),1);
