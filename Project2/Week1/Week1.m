@@ -3,31 +3,32 @@ radius = 200; % Radius of curved sections
 straight_length = 900; % Length of straight sections
 track_width = 15; % Width of the track
 
-%First Curve
+% First Curve
 theta1 = linspace(3*pi/2, pi/2, 100);
 x1 = radius * cos(theta1);
 y1 = radius * sin(theta1);
 
-%Second Curve
+% Second Curve
 theta2 = linspace(-pi/2, -3*pi/2, 100);
 x2 = -radius * cos(theta2) + straight_length;
 y2 = -radius * sin(theta2);
 
-%First Straight
-x3 = linspace(0,straight_length,100);
-y3 = -200*ones(size(x3));
+% First Straight
+x3 = linspace(0, straight_length, 100);
+y3 = -200 * ones(size(x3));
 
-%Second Straight
-x4 = linspace(straight_length,0,100);
-y4 = 200*ones(size(x4));
+% Second Straight
+x4 = linspace(straight_length, 0, 100);
+y4 = 200 * ones(size(x4));
 
-%Combine
-x = [x3, fliplr(x2), (x4), fliplr(x1)];
-y = [y3, fliplr(y2), (y4), fliplr(y1)];
-x = x - x(1);
-y = y - y(1);
+% Combine
+xpath = [x3, fliplr(x2), (x4), fliplr(x1)];
+ypath = [y3, fliplr(y2), (y4), fliplr(y1)];
+xpath = xpath - xpath(1);
+ypath = ypath - ypath(1);
 
-figure;
+plot(xpath, ypath, '.r');
+
 hold on
 
 x_min = -400;
@@ -40,7 +41,7 @@ y_max = 800;
 patch([x_min, x_max, x_max, x_min], [y_min, y_min, y_max, y_max], [0.5 0.8 0.5], 'EdgeColor', 'none');
 
 % Plot the track in grey
-plot(x, y, 'Color', [0.5 0.5 0.5], 'LineWidth', track_width);
+plot(xpath, ypath, 'Color', [0.5 0.5 0.5], 'LineWidth', track_width);
 axis equal;
 title('Racetrack');
 xlabel('X');
@@ -51,33 +52,46 @@ grid on;
 xlim([-400, 1300]);
 ylim([-400, 800]);
 
-% Create a patch for the vehicle (rectangle with width 10 and length 20)
-car_width = 20;
-car_length = 10;
-car_x = [-car_width/2, car_width/2, car_width/2, -car_width/2];
-car_y = [-car_length/2, -car_length/2, car_length/2, car_length/2];
-h_car = patch('XData', car_x, 'YData', car_y, 'EdgeColor', [0 0 0], 'FaceColor', 'none');
+% start an animated line feature
+h = animatedline('Color', 'r', 'LineWidth', 1);
+axis([-400 1300 -400 800])
 
-% Create an animated line for the vehicle's path
-h_path = animatedline('Color', 'r', 'LineWidth', 1);
+% create a "car" of width w and height 2w
+w = 20;
+car = [- w*2, - w; w*2, -w; w*2, w; -w*2, w]';
+a = patch('XData', car(:, 1), 'YData', car(:, 2));
+a.EdgeColor = [0 0 0];
+a.FaceColor = 'b';
 
-%Animate the vehicle following waypoints
-for i = 1:length(x)
-    x_vehicle = x(i);
-    y_vehicle = y(i);
+% perform an animated "simulation" - no dynamics, just kinematics
+for i = 1:length(xpath)-1
+    x = xpath(i);
+    y = ypath(i);
    
-    % Update vehicle's path
-    addpoints(h_path, x_vehicle, y_vehicle);
-    
-    % Update vehicle patch position
-    h_car.XData = car_x + x_vehicle;
-    h_car.YData = car_y + y_vehicle; 
+    addpoints(h, x, y);
 
-    % Pause to control animation speed
+    % Calculate slope of the curve at current point
+    slope = (ypath(i+1) - ypath(i)) / (xpath(i+1) - xpath(i));
+    
+    % Rotate car according to slope of curve 
+    angle = atan(slope);
+    car_centered = car - mean(car, 2);
+    car_rotated = rotate(car_centered, angle);
+    car_final = car_rotated + [x; y];
+    
+    % Update car image
+    a.XData = car_final(1, :);
+    a.YData = car_final(2, :);
+    
     pause(0.05);
     
-    % Force drawing to update the plot
-    drawnow;
+    drawnow limitrate nocallbacks
 end
 
+hold off
+
+function xyt = rotate(xy, theta)
+    R = [cos(theta), -sin(theta); sin(theta), cos(theta)];
+    xyt = R * xy;
+end
 
