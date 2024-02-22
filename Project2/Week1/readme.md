@@ -6,3 +6,5 @@ An animated line feature is then initialized and the "car" patch is also created
 Instructions: 
 Download the Week1.m (Matlab) file. Open the downloaded file using the Matlab R2023b application. Click the "run" button on the Matlab application. The expected output is a stadium-shaped track with a rectangular patch that follows the track's path. 
 
+## Week 1 Feedback (5/5)
+Good job Team 16! For Week 2, start developing a lateral dynamic model of a vehicle that contains subsystems that are listed in the Week 2 document.
