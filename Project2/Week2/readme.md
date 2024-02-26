@@ -1,7 +1,8 @@
-Week 2 Short Report"
+Week 2 Short Report:
 
-For Week 2, our team was tasked with developing a Simulink model to develop and add lateral dynamic components 
+For Week 2, our team was tasked with utilizing a given Simulink model to develop and add lateral dynamic components so the vehicle would complete one lap as fast as possible. Our team first set our desired velocity to 10 m/s. Then, we modified the "Driver Model" subsystem within the Simulink model to be a "simple driver model" so that the steering angle was set to a constant once the vehicle hit a certain x coordinate (in this case 900 and 0), where an if-else loop was used to "turn" the car by the set steering angle. When this model was first run, we saw on the "XY graph" that the vehicle was undershooting the track radius, so we increased the velocity to 10.8 m/s until the vehicle hit the desired radius of 200 meters. The second straight was also seen to not be horizontal as the y value would decrease as the x value decreased. To solve this, our group used part of the "pure pursuit control" method, we modified the if-else code so that the vehicle would travel in a horizontal line across the top straight, where previously it would decrease in y value as it went along the straight. 
 
 Instructions:
+Download the init.m (Matlab) file. Open the downloaded file using the Matlab R2023b application. Click the "run" button on the Matlab application. This initializes the car data and the desired velocity. Then download the p2_demo.slx file. Open the downloaded file using the Matlab R2023b application. If a "confirm object" parameter pop-up appears, click ok to set the object structure to Car Data. Then click the Run icon on the Simulation Tab. To view the graph produced, click on the "XY Graph" block which should display a single oval loop.   
 
-
+Note: Our team plans to use the "pure pursuit" control in the future by taking the path created in Week 1 and using it to set "goal points" to drive steering. We plan to attend office hours to understand how to implement this system fully. 
