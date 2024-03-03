@@ -14,3 +14,4 @@ Y = simout.Y.Data;
 t = simout.tout;
 
 RACE = raceStat(X,Y,t,path);
+
