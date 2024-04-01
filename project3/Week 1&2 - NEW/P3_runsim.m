@@ -21,7 +21,7 @@ for i = 1:length(sim_time_hwy)
 end
 
 energy = sum(power)*0.001; 
-disp(["Total Energy consumed for Highway EPA Cycle: " num2str(energy) " Joules"]);
+disp(['Total Energy consumed for Highway EPA Cycle: ' num2str(energy) ' Joules']);
 
 figure;
 plot(sim_time_hwy, sim_vel_hwy*(1/mph2mps), 'b')
@@ -83,7 +83,7 @@ for i = 1:length(sim_time_urb)
 end
 
 energy = sum(power)*0.001; 
-disp(["Total Energy consumed for Urban EPA Cycle: " num2str(energy) " Joules "]);
+disp(['Total Energy consumed for Urban EPA Cycle: ' num2str(energy) ' Joules ']);
 
 
 figure;
