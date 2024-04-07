@@ -1,1 +1,8 @@
+Instructions: Download the P3_Model_Final_V2.slx, P3_RunSim_Final.m, Finalinit.m, init_HWY_DriveCycle.m, and init_URB_DriveCycle.m files and place them within the same directory. Open the P3_Model_Final_V2.slx Simulink file. Then, open the P3_RunSim_Final.m file and click "Run" to run the script. The expected output is two figures, one for the highway drive cycle and the other for the urban drive cycle. The simulated velocity should be within the 3mph error and at all times.
+
+For the final week of Project 3, an electric motor drive and battery subsystems were added into an electric motor drive block, replacing the simplified powertrain model.
+
+The electric motor subsystem takes battery voltage, throttle % command, and motor speed as inputs. Then, it interpolates a max torque curve used for max torque values using the motorData.maxtorque, motorData.vbus, and motorData.rpm tables provided in the Finalinit.m file. The motor efficiency curve is found similarly, using interpolation based on the motorData.eta_torque and  motorData.eta_speed values provided. The block then calculates Current, Motor Torque, and Motor Inertia as outputs. 
+
+The battery subsystem then takes Current as an input. It then finds the current in the cells by dividing the input current by the number of cells in parallel. The SOC is then calculated and the OCV is found through interpolation using the batData.OCV and batData.SOC values from Finalinit. The voltage is then calculated by multiplying the number of cells in series by the product of OCV minus the product of internal resistance per cell and the current of each cell. Finally, the subsystem outputs the Battery Voltage (V) and SOC. 
 
