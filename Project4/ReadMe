@@ -3,5 +3,4 @@ Instructions:
 2. Run the P4init.m, Finalinit.m, GenTrack.m and P4_Model_2.slx files.
 3. Lastly, run the FinalRace.m file.
 
-The model should output 30 completed loops, with a minimum state of charge of 58.2% and a maximum
-state of charge of 80%.
+The model should output 30 completed loops, with a minimum state of charge of 58.2% and a maximumstate of charge of 80%.
