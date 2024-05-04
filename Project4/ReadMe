@@ -4,3 +4,4 @@ Instructions:
 3. Lastly, run the FinalRace.m file.
 
 The model should output 30 completed loops, with a minimum state of charge of 58.2% and a maximum state of charge of 80%.
+This model fals within the following parameters: SOC should not drop below 10% and go over 95%.
